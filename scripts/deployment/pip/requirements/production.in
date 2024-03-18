@@ -96,6 +96,7 @@ django-lockdown
 
 # Pdf generator
 WeasyPrint
+fonttools[woff]
 
 # GeoJSON APIs
 geojson
