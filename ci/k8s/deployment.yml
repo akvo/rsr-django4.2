@@ -1,13 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: rsr
+  name: rsr-staging
 spec:
   replicas: 1
   selector:
     matchLabels:
-      run: rsr
-      app: rsr
+      run: rsr-staging
+      app: rsr-staging
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -16,9 +16,9 @@ spec:
   template:
     metadata:
       labels:
-        run: rsr
+        run: rsr-staging
         rsr-version: ${TRAVIS_COMMIT}
-        app: rsr
+        app: rsr-staging
       annotations:
         prometheus.io/scrape: 'true'
     spec:
@@ -39,7 +39,7 @@ spec:
                       - "rsr-dedicated"
       containers:
       - name: rsr-nginx
-        image: eu.gcr.io/akvo-lumen/rsr-nginx:${TRAVIS_COMMIT}
+        image: eu.gcr.io/akvo-lumen/rsr-nginx-staging:${TRAVIS_COMMIT}
         ports:
         - containerPort: 80
           protocol: TCP
@@ -66,17 +66,17 @@ spec:
         - name: REPORT_SERVER_API_KEY
           valueFrom:
             secretKeyRef:
-              name: "rsr-secret"
+              name: "rsr-secret-staging"
               key: report-server-api-key
         - name: GOOGLE_STORAGE_BUCKET_NAME
           valueFrom:
             configMapKeyRef:
-              name: akvo-rsr
+              name: akvo-rsr-staging
               key: google-storege-bucket-name
         - name: DJANGO_DEFAULT_FILE_STORAGE
           valueFrom:
               configMapKeyRef:
-                name: akvo-rsr
+                name: akvo-rsr-staging
                 key: default-file-storage
         - name: ENVIRONMENT
           valueFrom:
@@ -86,13 +86,13 @@ spec:
         - name: REPORT_SERVER_URL
           valueFrom:
             secretKeyRef:
-              name: "rsr-secret"
+              name: "rsr-secret-staging"
               key: report-server-url
         - name: CI_COMMIT
           value: ${TRAVIS_COMMIT}
       - &backend
         name: rsr-backend
-        image: eu.gcr.io/akvo-lumen/rsr-backend:${TRAVIS_COMMIT}
+        image: eu.gcr.io/akvo-lumen/rsr-backend-staging:${TRAVIS_COMMIT}
         resources:
           requests:
             cpu: "1000m"
@@ -140,42 +140,42 @@ spec:
           name: DEFAULT_FILE_STORAGE
           valueFrom:
               configMapKeyRef:
-                name: akvo-rsr
+                name: akvo-rsr-staging
                 key: default-file-storage
         - &google-storage-bucket
           name: GOOGLE_STORAGE_BUCKET
           valueFrom:
               configMapKeyRef:
-                name: akvo-rsr
+                name: akvo-rsr-staging
                 key: google-storege-bucket-name
         - name: CLOUD_PROFILER_ENABLE
           valueFrom:
               configMapKeyRef:
-                name: akvo-rsr
+                name: akvo-rsr-staging
                 key: cloud-profiler-enable
         - &sentry-dsn
           name: SENTRY_DSN
           valueFrom:
             secretKeyRef:
-              name: "rsr-secret"
+              name: "rsr-secret-staging"
               key: sentry-dsn
         - &mapbox-key
           name: MAPBOX_KEY
           valueFrom:
             secretKeyRef:
-              name: "rsr-secret"
+              name: "rsr-secret-staging"
               key: mapbox-key
         - &gunicorn-debug-args
           name: GUNICORN_DEBUG_ARGS
           valueFrom:
             secretKeyRef:
-              name: "rsr-secret"
+              name: "rsr-secret-staging"
               key: gunicorn-debug
         - &django-secret-key
           name: DJANGO_SECRET_KEY
           valueFrom:
             secretKeyRef:
-              name: "rsr-secret"
+              name: "rsr-secret-staging"
               key: django-secret-key
         - &enable-stats
           name: ENABLE_STATS
@@ -232,7 +232,7 @@ spec:
         - <<: *default-file-storage
         - <<: *google-storage-bucket
       - name: rsr-statsd-to-prometheus
-        image: eu.gcr.io/akvo-lumen/rsr-statsd-to-prometheus:${TRAVIS_COMMIT}
+        image: eu.gcr.io/akvo-lumen/rsr-statsd-to-prometheus-staging:${TRAVIS_COMMIT}
         ports:
         - containerPort: 9125
         - containerPort: 9102
@@ -261,7 +261,7 @@ spec:
           - name: GOOGLE_SQL_DB_INSTANCE
             valueFrom:
               configMapKeyRef:
-                name: akvo-rsr
+                name: akvo-rsr-staging
                 key: google-sql-db-instance
         volumeMounts:
           - name: "secret-config"
@@ -270,7 +270,7 @@ spec:
             readOnly: true
       initContainers:
       - name: copy-assets-to-backend-container
-        image: eu.gcr.io/akvo-lumen/rsr-nginx:${TRAVIS_COMMIT}
+        image: eu.gcr.io/akvo-lumen/rsr-nginx-staging:${TRAVIS_COMMIT}
         command: [sh, -c]
         args: ["cp -r /var/akvo/rsr/staticroot/* /data"]
         volumeMounts:
@@ -281,4 +281,4 @@ spec:
            emptyDir: {}
          - name: "secret-config"
            secret:
-             secretName: "rsr-secret"
+             secretName: "rsr-secret-staging"

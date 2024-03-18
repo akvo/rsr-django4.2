@@ -32,23 +32,23 @@ gcloud config set compute/zone europe-west1-d
 gcloud config set container/use_client_certificate False
 
 if [[ "${CI_TAG:-}" =~ promote-.* ]]; then
-    log Environment is production
-    gcloud container clusters get-credentials production
-    K8S_CONFIG_FILE=ci/k8s/config-prod.yml
+    log For staging only...
+    #gcloud container clusters get-credentials production
+    #K8S_CONFIG_FILE=ci/k8s/config-prod.yml
+    exit 0
 else
     log Environment is test
     gcloud container clusters get-credentials test
     K8S_CONFIG_FILE=ci/k8s/config-test.yml
 
     log Creating statsd to prometheus
-    docker build -t "eu.gcr.io/${PROJECT_NAME}/rsr-statsd-to-prometheus:${CI_COMMIT}" statsd-to-prometheus
+    docker build -t "eu.gcr.io/${PROJECT_NAME}/rsr-statsd-to-prometheus-staging:${CI_COMMIT}" statsd-to-prometheus
 
     log Pushing images
     gcloud auth configure-docker
-    docker push "eu.gcr.io/${PROJECT_NAME}/rsr-backend:${CI_COMMIT}"
-    docker push "eu.gcr.io/${PROJECT_NAME}/rsr-nginx:${CI_COMMIT}"
-    docker push "eu.gcr.io/${PROJECT_NAME}/rsr-nginx-maintenance:${CI_COMMIT}"
-    docker push "eu.gcr.io/${PROJECT_NAME}/rsr-statsd-to-prometheus:${CI_COMMIT}"
+    docker push "eu.gcr.io/${PROJECT_NAME}/rsr-backend-staging:${CI_COMMIT}"
+    docker push "eu.gcr.io/${PROJECT_NAME}/rsr-nginx-staging:${CI_COMMIT}"
+    docker push "eu.gcr.io/${PROJECT_NAME}/rsr-statsd-to-prometheus-staging:${CI_COMMIT}"
 
 fi
 
