@@ -696,7 +696,6 @@ fonttools==4.49.0 \
     --hash=sha256:fc11e5114f3f978d0cea7e9853627935b30d451742eeb4239a81a677bdee6bf6 \
     --hash=sha256:fdb54b076f25d6b0f0298dc706acee5052de20c83530fa165b60d1f2e9cbe3cb
     # via
-    #   -r scripts/deployment/pip/requirements/production.in
     #   matplotlib
     #   weasyprint
 geojson==3.1.0 \
