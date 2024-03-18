@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: rsr-memcached
+  name: rsr-memcached-staging
 spec:
   replicas: 1
   selector:
     matchLabels:
-      run: rsr-memcached
-      app: rsr-memcached
+      run: rsr-memcached-staging
+      app: rsr-memcached-staging
   template:
     metadata:
       labels:
-        run: rsr-memcached
-        app: rsr-memcached
+        run: rsr-memcached-staging
+        app: rsr-memcached-staging
       annotations:
         prometheus.io/scrape: 'true'
     spec:
       containers:
-      - name: rsr-memcached
+      - name: rsr-memcached-staging
         image: memcached:1.6.1-alpine
         resources:
           requests:
@@ -52,10 +52,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: rsr-memcached
+  name: rsr-memcached-staging
 spec:
   ports:
     - port: 11211
       targetPort: 11211
   selector:
-    run: rsr-memcached
+    run: rsr-memcached-staging

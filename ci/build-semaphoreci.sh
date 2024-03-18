@@ -85,11 +85,12 @@ if [[ ! "${SKIP_BACKEND_TESTS:-}" = yes ]]; then
     run web scripts/docker/dev/run-as-user.sh scripts/docker/ci/build.sh
 fi
 
-if [[ -n "${DBDOCS_TOKEN:-}" ]] && [[ -f rsr.dbml ]]; then
-  log Generate dbml file and push it to dbdocs.io
-  docker build --rm=false -t rsr-dbdocs -f Dockerfile-dbdocs .
-  docker run --rm -e DBDOCS_TOKEN="${DBDOCS_TOKEN}" -v $(pwd):/app rsr-dbdocs dbdocs build rsr.dbml --project=rsr
-fi
+#DIsabled on staging test
+#if [[ -n "${DBDOCS_TOKEN:-}" ]] && [[ -f rsr.dbml ]]; then
+#  log Generate dbml file and push it to dbdocs.io
+#  docker build --rm=false -t rsr-dbdocs -f Dockerfile-dbdocs .
+#  docker run --rm -e DBDOCS_TOKEN="${DBDOCS_TOKEN}" -v $(pwd):/app rsr-dbdocs dbdocs build rsr.dbml --project=rsr
+#fi
 
 #log Stopping docker-compose
 #docker-compose -p rsrci -f docker-compose.yaml -f docker-compose.ci.yaml down
@@ -102,7 +103,7 @@ echo "DEPLOY_BRANCH = $(quote "$CI_BRANCH")" >> ._66_deploy_info.conf
 docker_build akvo/rsr-backend-prod-no-code -f Dockerfile-prod-no-code .
 
 log Creating Production Backend image with code
-docker build --rm=false -t eu.gcr.io/${PROJECT_NAME}/rsr-backend:${CI_COMMIT} -t rsr-backend:prod -f Dockerfile-prod .
+docker build --rm=false -t eu.gcr.io/${PROJECT_NAME}/rsr-backend-staging:${CI_COMMIT} -t rsr-backend:prod -f Dockerfile-prod .
 
 docker_build akvo/rsr-backend-prod-no-code-with-nodejs -f Dockerfile-prod-no-code-with-nodejs .
 docker_build akvo/rsr-backend-front-end -f Dockerfile-front-end .
@@ -110,7 +111,7 @@ docker_build akvo/rsr-backend-dir -f Dockerfile-dir .
 docker_build akvo/rsr-backend-spa -f Dockerfile-spa .
 
 log Creating Production Nginx image
-docker build --rm=false -t eu.gcr.io/${PROJECT_NAME}/rsr-nginx:${CI_COMMIT} -f Dockerfile-nginx .
+docker build --rm=false -t eu.gcr.io/${PROJECT_NAME}/rsr-nginx-staging:${CI_COMMIT} -f Dockerfile-nginx .
 
 log Starting docker-compose for end to end tests
 touch "log_docker_compose_ci_prod"

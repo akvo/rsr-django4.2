@@ -1,10 +1,10 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: akvo-rsr
+  name: akvo-rsr-staging
   namespace: default
 data:
   cloud-profiler-enable: "true"
-  google-storege-bucket-name: akvo-rsr-test-media-files
+  google-storege-bucket-name: akvo-rsr-staging-media-files
   default-file-storage: storages.backends.gcloud.GoogleCloudStorage
-  google-sql-db-instance: shared-test-database
+  google-sql-db-instance: shared-14-database
