@@ -1,9 +1,9 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: rsr-media-disk-staging
+  name: rsr-media-disk
   labels:
-    app: rsr-staging
+    app: rsr
 spec:
   accessModes:
     - ReadWriteOnce
