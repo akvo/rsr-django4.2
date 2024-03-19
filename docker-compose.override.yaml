@@ -83,7 +83,7 @@ services:
     depends_on:
       - web-spa
       - web-dir
-      - rsr-memcached
+      - rsr-memcached-staging
     ports:
       - "80:80"
     volumes:
