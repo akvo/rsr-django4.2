@@ -5,7 +5,7 @@ services:
     links:
       - "nginx:rsr.localdev.akvo.org"
   django-prod:
-    image: eu.gcr.io/${PROJECT_NAME}/rsr-backend:${TRAVIS_COMMIT}
+    image: eu.gcr.io/${PROJECT_NAME}/rsr-backend-staging:${TRAVIS_COMMIT}
     network_mode: service:nginx
     volumes:
       - ./scripts/docker/dev/50-docker-local-dev.conf:/config_overrides/50-docker-local-dev.conf
@@ -16,7 +16,7 @@ services:
       - DJANGO_SECRET_KEY=secretkey
       - DEFAULT_FILE_STORAGE=django.core.files.storage.FileSystemStorage
   reports:
-    image: eu.gcr.io/${PROJECT_NAME}/rsr-backend:${TRAVIS_COMMIT}
+    image: eu.gcr.io/${PROJECT_NAME}/rsr-backend-staging:${TRAVIS_COMMIT}
     network_mode: service:nginx
     volumes:
       - ./scripts/docker/dev/50-docker-local-dev.conf:/config_overrides/50-docker-local-dev.conf
@@ -29,7 +29,7 @@ services:
       - DJANGO_PORT=9000
       - DEFAULT_FILE_STORAGE=django.core.files.storage.FileSystemStorage
   nginx:
-    image: eu.gcr.io/${PROJECT_NAME}/rsr-nginx:${TRAVIS_COMMIT}
+    image: eu.gcr.io/${PROJECT_NAME}/rsr-nginx-staging:${TRAVIS_COMMIT}
     container_name: rsr.localdev.akvo.org
     volumes:
       - media-disk:/data
