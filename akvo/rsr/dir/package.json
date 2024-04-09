@@ -21,7 +21,7 @@
     "@rehooks/local-storage": "^2.4.0",
     "@sentry/browser": "^5.9.1",
     "@turf/bbox": "^6.5.0",
-    "antd": "^3.26.7",
+    "antd": "^5.16.1",
     "axios": "^0.28.1",
     "babel-polyfill": "^6.26.0",
     "classnames": "^2.2.6",
