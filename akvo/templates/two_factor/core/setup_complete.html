@@ -9,9 +9,15 @@
 
       <p>{% blocktrans trimmed %}Congratulations, you've successfully enabled two-factor authentication.{% endblocktrans %}</p>
 
-      <p>&nbsp;</p>
-
-      <p><a href="/my-rsr/my-details/" class="btn btn-default btn-block" role="button">{% trans "Back to Account Security" %}</a></p>
+      <h3>{% trans "Backup Tokens" %}</h2>
+      <p>{% blocktrans trimmed %}We highly recommend that you generate the Backup Tokens.
+          In the event that your device is damaged or lost, you can access your account
+          using backup tokens.{% endblocktrans %}
+      </p>
+      <p>
+        <a href="{% url 'two_factor:backup_tokens' %}" class="btn btn-primary">{% trans "Setup Backup Token" %}</a>
+        <a href="/my-rsr/my-details/" class="pull-right btn btn-default">{% trans "Skip for now" %}</a>
+      </p>
 
     </div>
   </div>
