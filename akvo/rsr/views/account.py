@@ -30,14 +30,14 @@ from django.core.signing import TimestampSigner, BadSignature
 from django.http import (HttpResponse, HttpResponseRedirect,
                          HttpResponseForbidden, HttpResponseNotAllowed,
                          HttpResponseBadRequest, HttpResponseNotFound)
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, reverse
 
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from django.views.decorators.http import require_POST
 
 from two_factor.utils import get_otpauth_url, totp_digits
 from two_factor.forms import AuthenticationTokenForm, BackupTokenForm
-from two_factor.views.core import LoginView, SetupView
+from two_factor.views.core import LoginView, RedirectURLMixin, SetupCompleteView, SetupView, BackupTokensView
 from two_factor.views.profile import DisableView
 
 
@@ -430,3 +430,37 @@ class SetupTwoFactorView(SetupView):
         if 'enforce_2fa' not in kwargs and self.request.user:
             kwargs['enforce_2fa'] = get_enforce_2fa(self.request.user)
         return super().get_context_data(form, **kwargs)
+
+    def get_success_url(self):
+        next_url = self.get_redirect_url()
+        success_url = reverse(self.success_url)
+        return f"{success_url}?next={next_url}" if next_url else success_url
+
+
+class SetupTwoFactorCompleteView(RedirectURLMixin, SetupCompleteView):
+
+    def get_context_data(self, **kwargs):
+        context: dict = super().get_context_data(**kwargs)
+        next_url = self.get_redirect_url()
+        backup_tokens_url = reverse("two_factor:backup_tokens")
+        setup_url = f'{backup_tokens_url}?next={next_url}' if next_url else backup_tokens_url
+        context.update({
+            "next_url": next_url,
+            "setup_url": setup_url,
+        })
+        return context
+
+
+class TwoFactorBackupTokensView(RedirectURLMixin, BackupTokensView):
+
+    def form_valid(self, form):
+        super().form_valid(form)
+        next_url = self.get_redirect_url()
+        success_url = f'{reverse(self.success_url)}?next={next_url}' if next_url else self.success_url
+        return redirect(success_url)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        next_url = self.get_redirect_url()
+        context.update({"next_url": next_url})
+        return context

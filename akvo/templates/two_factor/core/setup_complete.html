@@ -15,8 +15,8 @@
           using backup tokens.{% endblocktrans %}
       </p>
       <p>
-        <a href="{% url 'two_factor:backup_tokens' %}" class="btn btn-primary">{% trans "Setup Backup Token" %}</a>
-        <a href="/my-rsr/my-details/" class="pull-right btn btn-default">{% trans "Skip for now" %}</a>
+        <a id="setup-backups" href="{{ setup_url }}" class="btn btn-primary">{% trans "Setup Backup Token" %}</a>
+        <a id="setup-skip" href="{% firstof next_url '/my-rsr/my-details/' %}" class="pull-right btn btn-default">{% trans "Skip for now" %}</a>
       </p>
 
     </div>
