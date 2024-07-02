@@ -95,11 +95,6 @@ urlpatterns = i18n_patterns(
         name="two_factor_setup",
     ),
     path(
-        "account/two_factor/setup/complete/",
-        account.SetupTwoFactorCompleteView.as_view(),
-        name="two_factor_setup_complete",
-    ),
-    path(
         "account/two_factor/disable/",
         account.DisableTwoFactorView.as_view(),
         name="two_factor_disable",

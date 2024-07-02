@@ -38,7 +38,7 @@ from django.views.decorators.http import require_POST
 
 from two_factor.utils import get_otpauth_url, totp_digits
 from two_factor.forms import AuthenticationTokenForm, BackupTokenForm
-from two_factor.views.core import LoginView, RedirectURLMixin, SetupCompleteView, SetupView, BackupTokensView
+from two_factor.views.core import LoginView, RedirectURLMixin, SetupView, BackupTokensView
 from two_factor.views.profile import DisableView
 
 
@@ -453,20 +453,6 @@ class SetupTwoFactorView(SetupView):
 
     def get_static_device(self):
         return self.request.user.staticdevice_set.get_or_create(name='backup')[0]
-
-
-class SetupTwoFactorCompleteView(RedirectURLMixin, SetupCompleteView):
-
-    def get_context_data(self, **kwargs):
-        context: dict = super().get_context_data(**kwargs)
-        next_url = self.get_redirect_url()
-        backup_tokens_url = reverse("two_factor:backup_tokens")
-        setup_url = f'{backup_tokens_url}?next={next_url}' if next_url else backup_tokens_url
-        context.update({
-            "next_url": next_url,
-            "setup_url": setup_url,
-        })
-        return context
 
 
 class TwoFactorBackupTokensView(RedirectURLMixin, BackupTokensView):
