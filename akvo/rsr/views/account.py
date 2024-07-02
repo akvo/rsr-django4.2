@@ -8,6 +8,7 @@ see < http://www.gnu.org/licenses/agpl.html >.
 """
 
 import json
+from django_otp.plugins.otp_static.models import StaticToken
 import qrcode
 
 from qrcode.image.svg import SvgPathImage
@@ -426,6 +427,9 @@ class DisableTwoFactorView(DisableView):
 
 class SetupTwoFactorView(SetupView):
 
+    success_url = 'two_factor:backup_tokens'
+    number_of_tokens = 10
+
     def get_context_data(self, form, **kwargs):
         if 'enforce_2fa' not in kwargs and self.request.user:
             kwargs['enforce_2fa'] = get_enforce_2fa(self.request.user)
@@ -435,6 +439,20 @@ class SetupTwoFactorView(SetupView):
         next_url = self.get_redirect_url()
         success_url = reverse(self.success_url)
         return f"{success_url}?next={next_url}" if next_url else success_url
+
+    def done(self, form_list, **kwargs):
+        response = super().done(form_list, **kwargs)
+        self.generate_backup_tokens()
+        return response
+
+    def generate_backup_tokens(self):
+        device = self.get_static_device()
+        device.token_set.all().delete()
+        for n in range(self.number_of_tokens):
+            device.token_set.create(token=StaticToken.random_token())
+
+    def get_static_device(self):
+        return self.request.user.staticdevice_set.get_or_create(name='backup')[0]
 
 
 class SetupTwoFactorCompleteView(RedirectURLMixin, SetupCompleteView):
