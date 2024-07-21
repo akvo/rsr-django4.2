@@ -22,21 +22,6 @@ spec:
       annotations:
         prometheus.io/scrape: 'true'
     spec:
-      tolerations:
-        - key: "akvo-app"
-          operator: "Equal"
-          value: "rsr-dedicated"
-          effect: "NoSchedule"
-      affinity:
-        nodeAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - weight: 1
-              preference:
-                matchExpressions:
-                  - key: "akvo-app"
-                    operator: "In"
-                    values:
-                      - "rsr-dedicated"
       containers:
       - name: rsr-nginx
         image: eu.gcr.io/akvo-lumen/rsr-nginx-staging:${TRAVIS_COMMIT}
@@ -97,7 +82,7 @@ spec:
           requests:
             cpu: "1000m"
           limits:
-            cpu: "6000m"
+            cpu: "4000m"
         ports:
         - containerPort: 8000
           protocol: TCP
