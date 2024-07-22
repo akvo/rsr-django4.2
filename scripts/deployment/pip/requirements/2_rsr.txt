@@ -1380,9 +1380,9 @@ rules==3.3 \
     --hash=sha256:12c8bbab5f54560e68528fcca7abc0e162c35ac882e3cc0daed40ac49c963070 \
     --hash=sha256:bf7bea8b724b73c36a622714c1b3557620c187a2ee05321a2ac8ab7472dc4464
     # via -r scripts/deployment/pip/requirements/production.in
-sentry-sdk==1.31.0 \
-    --hash=sha256:64a7141005fb775b9db298a30de93e3b83e0ddd1232dc6f36eb38aebc1553291 \
-    --hash=sha256:6de2e88304873484207fed836388e422aeff000609b104c802749fd89d56ba5b
+sentry-sdk==2.8.0 \
+    --hash=sha256:6051562d2cfa8087bb8b4b8b79dc44690f8a054762a29c07e22588b1f619bfb5 \
+    --hash=sha256:aa4314f877d9cd9add5a0c9ba18e3f27f99f7de835ce36bd150e48a41c7c646f
     # via -r scripts/deployment/pip/requirements/production.in
 simplejson==3.19.2 \
     --hash=sha256:0405984f3ec1d3f8777c4adc33eac7ab7a3e629f3b1c05fdded63acc7cf01137 \
