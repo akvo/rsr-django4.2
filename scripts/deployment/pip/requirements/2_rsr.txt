@@ -1570,9 +1570,9 @@ xmltodict==0.13.0 \
 xmlunittest==0.5.0 \
     --hash=sha256:9c7e11603fc03adcef8ee6af2a4e6162846305adedc4c4524ee42ac551b0d8ff
     # via -r scripts/deployment/pip/requirements/production.in
-zipp==3.18.1 \
-    --hash=sha256:206f5a15f2af3dbaee80769fb7dc6f249695e940acca08dfb2a4769fe61e538b \
-    --hash=sha256:2884ed22e7d8961de1c9a05142eb69a247f120291bc0206a00a7642f09b5b715
+zipp==3.19.1 \
+    --hash=sha256:2828e64edb5386ea6a52e7ba7cdb17bb30a73a858f5eb6eb93d8d36f5ea26091 \
+    --hash=sha256:35427f6d5594f4acf82d25541438348c26736fa9b3afa2754bcd63cdb99d8e8f
     # via
     #   importlib-metadata
     #   importlib-resources
